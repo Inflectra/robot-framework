@@ -1,43 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 6.1.1 (Python 3.10.6 on win32)" generated="20231229 09:56:42.465" rpa="false" schemaversion="4">
+<robot generator="Robot 6.1.1 (Python 3.10.6 on win32)" generated="20231229 11:47:12.887" rpa="false" schemaversion="4">
 <suite id="s1" name="Tests" source="C:\Git\robot-framework\tests.robot">
 <test id="s1-t1" name="Simple Test Case" line="10">
 <kw name="Should Be Title Case" library="String">
 <arg>Robot Framework</arg>
 <doc>Fails if given ``string`` is not title.</doc>
-<status status="PASS" starttime="20231229 09:56:42.520" endtime="20231229 09:56:42.520"/>
+<status status="PASS" starttime="20231229 11:47:12.947" endtime="20231229 11:47:12.947"/>
 </kw>
 <kw name="Should Be Equal" library="BuiltIn">
 <arg>Text123</arg>
 <arg>Text123</arg>
 <doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" starttime="20231229 09:56:42.521" endtime="20231229 09:56:42.521"/>
+<status status="PASS" starttime="20231229 11:47:12.948" endtime="20231229 11:47:12.948"/>
 </kw>
 <kw name="Should Be True" library="BuiltIn">
 <arg>5 + 5 == 10</arg>
 <doc>Fails if the given condition is not true.</doc>
-<status status="PASS" starttime="20231229 09:56:42.522" endtime="20231229 09:56:42.523"/>
+<status status="PASS" starttime="20231229 11:47:12.949" endtime="20231229 11:47:12.949"/>
 </kw>
 <doc>Shows some assertion keywords</doc>
-<status status="PASS" starttime="20231229 09:56:42.519" endtime="20231229 09:56:42.523"/>
+<tag>TC:23</tag>
+<status status="PASS" starttime="20231229 11:47:12.945" endtime="20231229 11:47:12.949"/>
 </test>
-<test id="s1-t2" name="Test with Keywords" line="16">
+<test id="s1-t2" name="Test with Keywords" line="17">
 <kw name="Store Text" library="keywords">
 <arg>Hail Our Robot</arg>
 <kw name="Log" library="BuiltIn">
 <arg>The text "${text}" will be store in the variable \${stored_text}.</arg>
 <doc>Logs the given message with the given level.</doc>
-<msg timestamp="20231229 09:56:42.525" level="INFO">The text "Hail Our Robot" will be store in the variable ${stored_text}.</msg>
-<status status="PASS" starttime="20231229 09:56:42.525" endtime="20231229 09:56:42.525"/>
+<msg timestamp="20231229 11:47:12.953" level="INFO">The text "Hail Our Robot" will be store in the variable ${stored_text}.</msg>
+<status status="PASS" starttime="20231229 11:47:12.953" endtime="20231229 11:47:12.953"/>
 </kw>
 <kw name="Set Suite Variable" library="BuiltIn">
 <arg>${stored_text}</arg>
 <arg>${text}</arg>
 <doc>Makes a variable available everywhere within the scope of the current suite.</doc>
-<msg timestamp="20231229 09:56:42.526" level="INFO">${stored_text} = Hail Our Robot</msg>
-<status status="PASS" starttime="20231229 09:56:42.525" endtime="20231229 09:56:42.526"/>
+<msg timestamp="20231229 11:47:12.954" level="INFO">${stored_text} = Hail Our Robot</msg>
+<status status="PASS" starttime="20231229 11:47:12.953" endtime="20231229 11:47:12.954"/>
 </kw>
-<status status="PASS" starttime="20231229 09:56:42.524" endtime="20231229 09:56:42.526"/>
+<status status="PASS" starttime="20231229 11:47:12.952" endtime="20231229 11:47:12.954"/>
 </kw>
 <kw name="Add Text To Stored Text" library="keywords">
 <arg>Overlords!</arg>
@@ -45,23 +46,23 @@
 <var>${full_text}</var>
 <arg>${stored_text} ${text}</arg>
 <doc>Returns the given values which can then be assigned to a variables.</doc>
-<msg timestamp="20231229 09:56:42.527" level="INFO">${full_text} = Hail Our Robot Overlords!</msg>
-<status status="PASS" starttime="20231229 09:56:42.527" endtime="20231229 09:56:42.527"/>
+<msg timestamp="20231229 11:47:12.955" level="INFO">${full_text} = Hail Our Robot Overlords!</msg>
+<status status="PASS" starttime="20231229 11:47:12.955" endtime="20231229 11:47:12.955"/>
 </kw>
 <kw name="Log" library="BuiltIn">
 <arg>The resulting text is: ${full_text}</arg>
 <doc>Logs the given message with the given level.</doc>
-<msg timestamp="20231229 09:56:42.527" level="INFO">The resulting text is: Hail Our Robot Overlords!</msg>
-<status status="PASS" starttime="20231229 09:56:42.527" endtime="20231229 09:56:42.527"/>
+<msg timestamp="20231229 11:47:12.955" level="INFO">The resulting text is: Hail Our Robot Overlords!</msg>
+<status status="PASS" starttime="20231229 11:47:12.955" endtime="20231229 11:47:12.955"/>
 </kw>
 <kw name="Set Suite Variable" library="BuiltIn">
 <arg>${stored_text}</arg>
 <arg>${full_text}</arg>
 <doc>Makes a variable available everywhere within the scope of the current suite.</doc>
-<msg timestamp="20231229 09:56:42.528" level="INFO">${stored_text} = Hail Our Robot Overlords!</msg>
-<status status="PASS" starttime="20231229 09:56:42.527" endtime="20231229 09:56:42.528"/>
+<msg timestamp="20231229 11:47:12.956" level="INFO">${stored_text} = Hail Our Robot Overlords!</msg>
+<status status="PASS" starttime="20231229 11:47:12.955" endtime="20231229 11:47:12.956"/>
 </kw>
-<status status="PASS" starttime="20231229 09:56:42.527" endtime="20231229 09:56:42.528"/>
+<status status="PASS" starttime="20231229 11:47:12.954" endtime="20231229 11:47:12.956"/>
 </kw>
 <kw name="Verify Stored Text Length" library="keywords">
 <arg>25</arg>
@@ -69,52 +70,54 @@
 <arg>${stored_text}</arg>
 <arg>${expected_length}</arg>
 <doc>Verifies that the length of the given item is correct.</doc>
-<msg timestamp="20231229 09:56:42.529" level="INFO">Length is 25</msg>
-<status status="PASS" starttime="20231229 09:56:42.529" endtime="20231229 09:56:42.529"/>
+<msg timestamp="20231229 11:47:12.957" level="INFO">Length is 25</msg>
+<status status="PASS" starttime="20231229 11:47:12.957" endtime="20231229 11:47:12.957"/>
 </kw>
-<status status="PASS" starttime="20231229 09:56:42.528" endtime="20231229 09:56:42.529"/>
+<status status="PASS" starttime="20231229 11:47:12.956" endtime="20231229 11:47:12.957"/>
 </kw>
 <kw name="Get Stored Text" library="keywords">
 <var>${current_text}</var>
-<msg timestamp="20231229 09:56:42.530" level="INFO">${current_text} = Hail Our Robot Overlords!</msg>
-<status status="PASS" starttime="20231229 09:56:42.529" endtime="20231229 09:56:42.530"/>
+<msg timestamp="20231229 11:47:12.958" level="INFO">${current_text} = Hail Our Robot Overlords!</msg>
+<status status="PASS" starttime="20231229 11:47:12.957" endtime="20231229 11:47:12.958"/>
 </kw>
 <kw name="Should Be Equal" library="BuiltIn">
 <arg>${current_text}</arg>
 <arg>Hail Our Robot Overlords!</arg>
 <doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" starttime="20231229 09:56:42.530" endtime="20231229 09:56:42.530"/>
+<status status="PASS" starttime="20231229 11:47:12.958" endtime="20231229 11:47:12.958"/>
 </kw>
-<status status="PASS" starttime="20231229 09:56:42.524" endtime="20231229 09:56:42.531"/>
+<tag>TC:24</tag>
+<status status="PASS" starttime="20231229 11:47:12.951" endtime="20231229 11:47:12.959"/>
 </test>
-<test id="s1-t3" name="Test for the year 2022" line="23">
+<test id="s1-t3" name="Test for the year 2022" line="25">
 <kw name="Get Current Date" library="DateTime">
 <var>${date}</var>
 <arg>result_format=datetime</arg>
 <doc>Returns current local or UTC time with an optional increment.</doc>
-<msg timestamp="20231229 09:56:42.534" level="INFO">${date} = 2023-12-29 09:56:42.533506</msg>
-<status status="PASS" starttime="20231229 09:56:42.534" endtime="20231229 09:56:42.534"/>
+<msg timestamp="20231229 11:47:12.964" level="INFO">${date} = 2023-12-29 11:47:12.963637</msg>
+<status status="PASS" starttime="20231229 11:47:12.963" endtime="20231229 11:47:12.964"/>
 </kw>
 <kw name="Log" library="BuiltIn">
 <arg>${date}</arg>
 <doc>Logs the given message with the given level.</doc>
-<msg timestamp="20231229 09:56:42.534" level="INFO">2023-12-29 09:56:42.533506</msg>
-<status status="PASS" starttime="20231229 09:56:42.534" endtime="20231229 09:56:42.534"/>
+<msg timestamp="20231229 11:47:12.965" level="INFO">2023-12-29 11:47:12.963637</msg>
+<status status="PASS" starttime="20231229 11:47:12.965" endtime="20231229 11:47:12.965"/>
 </kw>
 <kw name="Should Be Equal As Strings" library="BuiltIn">
 <arg>${date.year}</arg>
 <arg>2022</arg>
 <doc>Fails if objects are unequal after converting them to strings.</doc>
-<msg timestamp="20231229 09:56:42.535" level="INFO">Argument types are:
+<msg timestamp="20231229 11:47:12.967" level="INFO">Argument types are:
 &lt;class 'int'&gt;
 &lt;class 'str'&gt;</msg>
-<msg timestamp="20231229 09:56:42.535" level="FAIL">2023 != 2022</msg>
-<status status="FAIL" starttime="20231229 09:56:42.535" endtime="20231229 09:56:42.535"/>
+<msg timestamp="20231229 11:47:12.967" level="FAIL">2023 != 2022</msg>
+<status status="FAIL" starttime="20231229 11:47:12.966" endtime="20231229 11:47:12.967"/>
 </kw>
 <doc>Tests if it is still 2022...</doc>
-<status status="FAIL" starttime="20231229 09:56:42.533" endtime="20231229 09:56:42.537">2023 != 2022</status>
+<tag>TC:25</tag>
+<status status="FAIL" starttime="20231229 11:47:12.961" endtime="20231229 11:47:12.968">2023 != 2022</status>
 </test>
-<test id="s1-t4" name="Test Case that fails" line="29">
+<test id="s1-t4" name="Test Case that fails" line="32">
 <kw name="Check Correct Greeting" library="keywords">
 <arg>Hail Our Robot Overlords!</arg>
 <if>
@@ -122,21 +125,21 @@
 <kw name="Log To Console" library="BuiltIn">
 <arg>\nYou may proceed...</arg>
 <doc>Logs the given message to the console.</doc>
-<status status="PASS" starttime="20231229 09:56:42.545" endtime="20231229 09:56:42.546"/>
+<status status="PASS" starttime="20231229 11:47:12.979" endtime="20231229 11:47:12.980"/>
 </kw>
-<status status="PASS" starttime="20231229 09:56:42.540" endtime="20231229 09:56:42.546"/>
+<status status="PASS" starttime="20231229 11:47:12.972" endtime="20231229 11:47:12.980"/>
 </branch>
 <branch type="ELSE">
 <kw name="Fail" library="BuiltIn">
 <arg>Sorry. But that was the wrong answer... Bye Bye...</arg>
 <doc>Fails the test with the given message and optionally alters its tags.</doc>
-<status status="NOT RUN" starttime="20231229 09:56:42.546" endtime="20231229 09:56:42.546"/>
+<status status="NOT RUN" starttime="20231229 11:47:12.980" endtime="20231229 11:47:12.980"/>
 </kw>
-<status status="NOT RUN" starttime="20231229 09:56:42.546" endtime="20231229 09:56:42.546"/>
+<status status="NOT RUN" starttime="20231229 11:47:12.980" endtime="20231229 11:47:12.980"/>
 </branch>
-<status status="PASS" starttime="20231229 09:56:42.540" endtime="20231229 09:56:42.546"/>
+<status status="PASS" starttime="20231229 11:47:12.972" endtime="20231229 11:47:12.980"/>
 </if>
-<status status="PASS" starttime="20231229 09:56:42.540" endtime="20231229 09:56:42.546"/>
+<status status="PASS" starttime="20231229 11:47:12.972" endtime="20231229 11:47:12.980"/>
 </kw>
 <kw name="Check Correct Greeting" library="keywords">
 <arg>Hello World!</arg>
@@ -145,35 +148,40 @@
 <kw name="Log To Console" library="BuiltIn">
 <arg>\nYou may proceed...</arg>
 <doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" starttime="20231229 09:56:42.547" endtime="20231229 09:56:42.547"/>
+<status status="NOT RUN" starttime="20231229 11:47:12.982" endtime="20231229 11:47:12.982"/>
 </kw>
-<status status="NOT RUN" starttime="20231229 09:56:42.547" endtime="20231229 09:56:42.547"/>
+<status status="NOT RUN" starttime="20231229 11:47:12.981" endtime="20231229 11:47:12.982"/>
 </branch>
 <branch type="ELSE">
 <kw name="Fail" library="BuiltIn">
 <arg>Sorry. But that was the wrong answer... Bye Bye...</arg>
 <doc>Fails the test with the given message and optionally alters its tags.</doc>
-<msg timestamp="20231229 09:56:42.547" level="FAIL">Sorry. But that was the wrong answer... Bye Bye...</msg>
-<status status="FAIL" starttime="20231229 09:56:42.547" endtime="20231229 09:56:42.548"/>
+<msg timestamp="20231229 11:47:12.982" level="FAIL">Sorry. But that was the wrong answer... Bye Bye...</msg>
+<status status="FAIL" starttime="20231229 11:47:12.982" endtime="20231229 11:47:12.983"/>
 </kw>
-<status status="FAIL" starttime="20231229 09:56:42.547" endtime="20231229 09:56:42.548"/>
+<status status="FAIL" starttime="20231229 11:47:12.982" endtime="20231229 11:47:12.983"/>
 </branch>
-<status status="FAIL" starttime="20231229 09:56:42.547" endtime="20231229 09:56:42.548"/>
+<status status="FAIL" starttime="20231229 11:47:12.981" endtime="20231229 11:47:12.983"/>
 </if>
-<status status="FAIL" starttime="20231229 09:56:42.547" endtime="20231229 09:56:42.548"/>
+<status status="FAIL" starttime="20231229 11:47:12.981" endtime="20231229 11:47:12.983"/>
 </kw>
-<status status="FAIL" starttime="20231229 09:56:42.539" endtime="20231229 09:56:42.548">Sorry. But that was the wrong answer... Bye Bye...</status>
+<tag>TC:26</tag>
+<status status="FAIL" starttime="20231229 11:47:12.971" endtime="20231229 11:47:12.983">Sorry. But that was the wrong answer... Bye Bye...</status>
 </test>
-<doc>This .robot file is a suite
+<doc>This .robot file is a sample test suite for demonstrating the Spira integration
 
 Keywords are imported from the resource file</doc>
-<status status="FAIL" starttime="20231229 09:56:42.467" endtime="20231229 09:56:42.552"/>
+<status status="FAIL" starttime="20231229 11:47:12.890" endtime="20231229 11:47:12.986"/>
 </suite>
 <statistics>
 <total>
 <stat pass="2" fail="2" skip="0">All Tests</stat>
 </total>
 <tag>
+<stat pass="1" fail="0" skip="0">TC:23</stat>
+<stat pass="1" fail="0" skip="0">TC:24</stat>
+<stat pass="0" fail="1" skip="0">TC:25</stat>
+<stat pass="0" fail="1" skip="0">TC:26</stat>
 </tag>
 <suite>
 <stat pass="2" fail="2" skip="0" id="s1" name="Tests">Tests</stat>
