@@ -25,3 +25,7 @@
 
 # Useful links
 https://packaging.python.org/tutorials/packaging-projects/
+
+# Other information
+To create an xunit XML file (not needed for Spira integration, but useful for other tools)
+`rebot -R --xunit xunit.xml output*.xml`

@@ -3,65 +3,13 @@ import json
 import datetime
 import time
 import configparser
-import pytest
+from robot.api import ExecutionResult, ResultVisitor
+import sys
 
 '''
 The config is only retrieved once
 '''
 config = None
-
-@pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    outcome = yield
-    report = outcome.get_result()
-    if report.when == "call":
-        config = getConfig()
-        # Only do stuff if config is specified
-        if config["url"] != "":
-            status_id = -1
-            current_time = datetime.datetime.utcnow()
-            # The function name
-            test_name = report.location[2].lower()
-            stack_trace = report.longreprtext
-            message = ""
-
-            if report.outcome == "passed":
-                # 2 is passed
-                status_id = 2
-                message = "Test Succeeded"
-            elif report.outcome == "skipped":
-                # 3 is not run
-                status_id = 3
-                message = "Test Skipped"
-            elif report.outcome == "failed":
-                #1 is failed
-                status_id = 1
-                message = ""
-
-            # Get the test case id if specified, otherwise use the default
-            if test_name in config["test_case_ids"]:
-                test_case_id = config["test_case_ids"][test_name.lower()]
-            else:
-                test_case_id = config["test_case_ids"]["default"]
-
-            # Create the test run
-            test_run = SpiraTestRun(
-                config["project_id"], 
-                test_case_id, 
-                test_name, 
-                stack_trace, 
-                status_id, 
-                current_time - datetime.timedelta(seconds=report.duration), 
-                current_time,
-                message=message, 
-                release_id=config["release_id"], 
-                test_set_id=config["test_set_id"]
-            )
-            # Post the test run!
-            test_run.post(config["url"], config["username"], config["token"])
-
-    return report
-
 
 def getConfig():
     global config
@@ -74,10 +22,7 @@ def getConfig():
             "token": "",
             "project_id": -1,
             "release_id": -1,
-            "test_set_id": -1,
-            "test_case_ids": {
-                "default": -1
-            }
+            "test_set_id": -1
         }
         # Parse the config file
         parser = configparser.ConfigParser()
@@ -87,18 +32,15 @@ def getConfig():
 
         # Process Configs
         for section in sections:
-            # Handle credentials and test case mappings differently
+            # Handle credentials
             if section == "credentials":
                 for (key, value) in parser.items(section):
                     config[key] = value
-            elif section == "test_cases":
-                for (key, value) in parser.items(section):
-                    config["test_case_ids"][key.lower()] = value
     return config
 
 
 # Name of this extension
-RUNNER_NAME = "PyTest"
+RUNNER_NAME = "Robot-Framework"
 
 
 class SpiraTestRun:
@@ -176,3 +118,41 @@ class SpiraTestRun:
 
         request = requests.post(url, data=json.dumps(
             body), params=params, headers=headers)
+
+class SpiraResultVisitor(ResultVisitor):
+    def __init__(self, markdown_file='report.md'):
+        self.failed_tests = []
+        self.passed_tests = []
+        self.markdown_file = markdown_file
+
+    def visit_test(self, test):
+        if test.status == 'FAIL':
+            self.failed_tests.append(test.name)
+        elif test.status == 'PASS':
+            self.passed_tests.append(test.name)
+
+    def end_result(self, result):
+        # Create a new markdown file
+        with open(self.markdown_file, "w") as f:
+            f.write("# Robot Framework Report\n")
+            f.write("|Test|Status|\n")
+            f.write("|---|---|\n")
+            for test in self.passed_tests:
+                f.write(f"|{test}|PASS|\n")
+            for test in self.failed_tests:
+                f.write(f"|{test}|FAIL|\n")
+        
+        # Report to the console
+        print("Successfully reported {} test cases to Spira.\n".format(2))
+                
+if __name__ == '__main__':
+    try:
+        output_file = sys.argv[1]
+    except IndexError:
+        output_file = "output.xml"
+    try:
+        markdown_file = sys.argv[2]
+    except IndexError:
+        markdown_file = "report.md"
+    result = ExecutionResult(output_file)
+    result.visit(SpiraResultVisitor())
