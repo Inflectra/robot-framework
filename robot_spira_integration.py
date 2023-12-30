@@ -151,11 +151,11 @@ class SpiraPostResults():
             # Create the Spira test run
             test_run = SpiraTestRun(
                 config["project_id"], 
-                test_result["id"], 
+                test_result["test_case_id"], 
                 test_result["name"], 
                 test_result["stack_trace"], 
                 test_result["execution_status_id"], 
-                current_time - datetime.timedelta(seconds=test_result["duration"]), 
+                current_time - datetime.timedelta(seconds=test_result["duration_seconds"]), 
                 current_time,
                 message=test_result["message"], 
                 release_id=config["release_id"], 
@@ -173,18 +173,37 @@ class SpiraResultVisitor(ResultVisitor):
         self.test_results = []
 
     def visit_test(self, test):
-        # Create new test result object
-        test_result = {
-            'id': 4,
-            'name': test.name,
-            'execution_status_id': 1,
-            'stack_trace': '',
-            'message': '',
-            'duration': 0
-        }
+        # Extract the test case id from the tags
+        test_case_id = 4
+        tags = test.tags
+        if test_case_id == "":
+            print("Unable to find Spira id tag for test case '{}', so skipping this test case.".format(test.name))
 
-        # Parse the test case ID, and append the result
-        self.test_results.append(test_result)
+        else:
+            # Convert the test case status
+            execution_status_id = -1
+            if test.status == "PASS":
+                # 2 is passed
+                execution_status_id = 1
+            elif test.status == "skipped":
+                # 3 is not run
+                execution_status_id = 3
+            elif test.status == "FAIL":
+                #1 is failed
+                execution_status_id = 1
+
+            # Create new test result object
+            test_result = {
+                'test_case_id': test_case_id,
+                'name': test.name,
+                'execution_status_id': execution_status_id,
+                'stack_trace': test.message,
+                'message': test.message + ' ' + test.status,
+                'duration_seconds': test.elapsedtime * 1000
+            }
+
+            # Parse the test case ID, and append the result
+            self.test_results.append(test_result)
 
     def end_result(self, result):
         # Send the results to Spira
