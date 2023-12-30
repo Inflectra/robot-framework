@@ -97,8 +97,8 @@ class SpiraTestRun:
         body = {
             # Constant for plain text
             'TestRunFormatId': 1,
-            'StartDate': self.start_time.isoformat(),
-            'EndDate': self.end_time.isoformat(),
+            'StartDate': self.start_time.strftime('%Y-%m-%dT%H:%M:%SZ'),
+            'EndDate': self.end_time.strftime('%Y-%m-%dT%H:%M:%SZ'),
             'RunnerName': RUNNER_NAME,
             'RunnerTestName': self.test_name,
             'RunnerMessage': self.message,
@@ -118,41 +118,83 @@ class SpiraTestRun:
 
         request = requests.post(url, data=json.dumps(
             body), params=params, headers=headers)
+        
+class SpiraPostResults():
+    def __init__(self):
+        # Get the configuration information
+        self.config = getConfig()
+
+    def sendResults(self, test_results):
+        # Only do stuff if config is specified
+        if self.config["url"] == "":
+            print("Unable to report test results back to Spira since URL in configuration is empty")
+
+        else:
+            print("Sending test results to Spira at URL '{}'.\n".format(self.config["url"]))
+            try:
+                # Loop through all the tests
+                for test_result in test_results:
+                    # Get the current date/time
+                    current_time = datetime.datetime.now(datetime.UTC)
+
+                    # Send the result
+                    self.sendResult(test_result, current_time)
+
+                # Report to the console
+                print("Successfully reported {} test cases to Spira.\n".format(len(test_results)))
+        
+            except Exception as exception:
+                print("Unable to report test cases to Spira due to error '{}'.\n".format(exception))
+
+    def sendResult(self, test_result, current_time):
+        try:
+            # Create the Spira test run
+            test_run = SpiraTestRun(
+                config["project_id"], 
+                test_result["id"], 
+                test_result["name"], 
+                test_result["stack_trace"], 
+                test_result["execution_status_id"], 
+                current_time - datetime.timedelta(seconds=test_result["duration"]), 
+                current_time,
+                message=test_result["message"], 
+                release_id=config["release_id"], 
+                test_set_id=config["test_set_id"]
+            )
+            # Post the test run!
+            test_run.post(config["url"], config["username"], config["token"])
+
+        except Exception as exception:
+            print("Unable to report test case '{}' to Spira due to error '{}'.\n".format(test_result["name"], exception))
+
 
 class SpiraResultVisitor(ResultVisitor):
     def __init__(self, markdown_file='report.md'):
-        self.failed_tests = []
-        self.passed_tests = []
-        self.markdown_file = markdown_file
+        self.test_results = []
 
     def visit_test(self, test):
-        if test.status == 'FAIL':
-            self.failed_tests.append(test.name)
-        elif test.status == 'PASS':
-            self.passed_tests.append(test.name)
+        # Create new test result object
+        test_result = {
+            'id': 4,
+            'name': test.name,
+            'execution_status_id': 1,
+            'stack_trace': '',
+            'message': '',
+            'duration': 0
+        }
+
+        # Parse the test case ID, and append the result
+        self.test_results.append(test_result)
 
     def end_result(self, result):
-        # Create a new markdown file
-        with open(self.markdown_file, "w") as f:
-            f.write("# Robot Framework Report\n")
-            f.write("|Test|Status|\n")
-            f.write("|---|---|\n")
-            for test in self.passed_tests:
-                f.write(f"|{test}|PASS|\n")
-            for test in self.failed_tests:
-                f.write(f"|{test}|FAIL|\n")
-        
-        # Report to the console
-        print("Successfully reported {} test cases to Spira.\n".format(2))
+        # Send the results to Spira
+        spira_results = SpiraPostResults()
+        spira_results.sendResults(self.test_results)
                 
 if __name__ == '__main__':
     try:
         output_file = sys.argv[1]
     except IndexError:
         output_file = "output.xml"
-    try:
-        markdown_file = sys.argv[2]
-    except IndexError:
-        markdown_file = "report.md"
     result = ExecutionResult(output_file)
     result.visit(SpiraResultVisitor())
