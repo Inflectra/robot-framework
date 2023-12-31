@@ -9,13 +9,13 @@ Library           DateTime
 *** Test Cases ***
 Simple Test Case
     [Documentation]    Shows some assertion keywords
-    [Tags]    TC:23
+    [Tags]    TC:2
     Should Be Title Case    Robot Framework
     Should Be Equal    Text123    Text123
     Should Be True    5 + 5 == 10
 
 Test with Keywords
-    [Tags]    TC:24
+    [Tags]    TC:3
     Store Text    Hail Our Robot
     Add Text To Stored Text     Overlords!
     Verify Stored Text Length    25
@@ -24,12 +24,12 @@ Test with Keywords
 
 Test for the year 2022
     [Documentation]    Tests if it is still 2022...
-    [Tags]    TC:25
+    [Tags]    TC:4
     ${date}=    Get Current Date    result_format=datetime
     Log    ${date}
     Should Be Equal As Strings    ${date.year}    2022
 
 Test Case that fails
-    [Tags]    TC:26
+    [Tags]    TC:5
     Check Correct Greeting    Hail Our Robot Overlords!
     Check Correct Greeting    Hello World!

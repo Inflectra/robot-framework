@@ -117,8 +117,20 @@ class SpiraTestRun:
 
         dumps = json.dumps(body)
 
-        request = requests.post(url, data=json.dumps(
+        response = requests.post(url, data=json.dumps(
             body), params=params, headers=headers)
+
+        if response.status_code == 404:
+            # Test Case Not Found
+            print ("Unable to find a matching Spira test case of id TC:{}, so not able to post result".format(self.test_case_id))
+            return True
+        elif response.status_code == 200:
+            # OK
+            return False
+        else:
+            # General Error
+            print ("Unable to send results due to HTTP error: {} ({})".format(response.reason, response.status_code))
+            return True
         
 class SpiraPostResults():
     def __init__(self):
@@ -134,15 +146,18 @@ class SpiraPostResults():
             print("Sending test results to Spira at URL '{}'.\n".format(self.config["url"]))
             try:
                 # Loop through all the tests
+                success_count = 0
                 for test_result in test_results:
                     # Get the current date/time
                     current_time = datetime.datetime.now(datetime.UTC)
 
                     # Send the result
-                    self.sendResult(test_result, current_time)
+                    is_error = self.sendResult(test_result, current_time)
+                    if is_error == False:
+                        success_count = success_count + 1
 
                 # Report to the console
-                print("Successfully reported {} test cases to Spira.\n".format(len(test_results)))
+                print("Successfully reported {} test cases to Spira.\n".format(success_count))
         
             except Exception as exception:
                 print("Unable to report test cases to Spira due to error '{}'.\n".format(exception))
@@ -163,26 +178,29 @@ class SpiraPostResults():
                 test_set_id=config["test_set_id"]
             )
             # Post the test run!
-            test_run.post(config["url"], config["username"], config["token"])
+            is_error = test_run.post(config["url"], config["username"], config["token"])
+            return is_error
 
         except Exception as exception:
             print("Unable to report test case '{}' to Spira due to error '{}'.\n".format(test_result["name"], exception))
+            return True
 
 
 class SpiraResultVisitor(ResultVisitor):
-    def __init__(self, markdown_file='report.md'):
+    def __init__(self, config_file='spira.cfg'):
         self.test_results = []
 
     def visit_test(self, test):
         # Extract the test case id from the tags
-        if test.tags == "":
+        if len(test.tags) == 0:
             print("The test case '{}' has no tags specified, so skipping this test case.".format(test.name))
         
         else:
             test_case_id = -1
-            m = re.search('(TC:([0-9]+)', test.tags)
-            if len(m.group) > 0:
-                test_case_id = m.group(0)
+            for tag in test.tags:
+                m = re.search('TC:([0-9]+)', tag)
+                if m.lastindex == 1:
+                    test_case_id = m.group(1)
             
             if test_case_id == -1:
                 print("Unable to find Spira id tag for test case '{}', so skipping this test case.".format(test.name))
@@ -192,7 +210,7 @@ class SpiraResultVisitor(ResultVisitor):
                 execution_status_id = 3 # Not Run
                 if test.status == "PASS":
                     # 2 is passed
-                    execution_status_id = 1
+                    execution_status_id = 2
                 elif test.status == "SKIP":
                     # 4 is n/a
                     execution_status_id = 4
@@ -206,13 +224,17 @@ class SpiraResultVisitor(ResultVisitor):
                     #1 is n/a
                     execution_status_id = 4
 
+                # Create the details and message
+                message = test.message + ' (' + test.status + ')'
+                details = 'Test Case: ' + test.longname + '\nDocumentation: ' + test.doc + '\nMessage: ' + message + '\n'
+
                 # Create new test result object
                 test_result = {
                     'test_case_id': test_case_id,
                     'name': test.name,
                     'execution_status_id': execution_status_id,
-                    'stack_trace': test.message,
-                    'message': test.message + ' (' + test.status + ')',
+                    'stack_trace': details,
+                    'message': message,
                     'duration_seconds': test.elapsedtime * 1000
                 }
 

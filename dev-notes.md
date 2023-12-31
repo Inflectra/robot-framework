@@ -7,11 +7,11 @@
 - install robotframework `pip install robotframework`
 - install twine for distribution `pip install twine`
 
-## Work and test code locally
-- change version number in setup.py
-- to build locally and replace the local package run `pip install -e ./`
-- you can then access the package as you would normally. So in your test setup run `pytest sample_test.py` and it will use this local plugin
-- make changes to code, repeat building and testing locally 
+## Running the sample
+- Make sure the spira url and login/password are correct in the spira.cfg file
+- Use either of these two commands, depending on whether you want to test running with a specific output folder/filename
+- run `python robot_spira_integration.py`
+- run `python robot_spira_integration.py Output.xml`
 
 ## Distribute code
 - double check the version is correct in setup.py
