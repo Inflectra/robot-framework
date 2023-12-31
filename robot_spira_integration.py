@@ -1,4 +1,5 @@
 import requests
+import re
 import json
 import datetime
 import time
@@ -174,36 +175,49 @@ class SpiraResultVisitor(ResultVisitor):
 
     def visit_test(self, test):
         # Extract the test case id from the tags
-        test_case_id = 4
-        tags = test.tags
-        if test_case_id == "":
-            print("Unable to find Spira id tag for test case '{}', so skipping this test case.".format(test.name))
-
+        if test.tags == "":
+            print("The test case '{}' has no tags specified, so skipping this test case.".format(test.name))
+        
         else:
-            # Convert the test case status
-            execution_status_id = -1
-            if test.status == "PASS":
-                # 2 is passed
-                execution_status_id = 1
-            elif test.status == "skipped":
-                # 3 is not run
-                execution_status_id = 3
-            elif test.status == "FAIL":
-                #1 is failed
-                execution_status_id = 1
+            test_case_id = -1
+            m = re.search('(TC:([0-9]+)', test.tags)
+            if len(m.group) > 0:
+                test_case_id = m.group(0)
+            
+            if test_case_id == -1:
+                print("Unable to find Spira id tag for test case '{}', so skipping this test case.".format(test.name))
 
-            # Create new test result object
-            test_result = {
-                'test_case_id': test_case_id,
-                'name': test.name,
-                'execution_status_id': execution_status_id,
-                'stack_trace': test.message,
-                'message': test.message + ' ' + test.status,
-                'duration_seconds': test.elapsedtime * 1000
-            }
+            else:
+                # Convert the test case status
+                execution_status_id = 3 # Not Run
+                if test.status == "PASS":
+                    # 2 is passed
+                    execution_status_id = 1
+                elif test.status == "SKIP":
+                    # 4 is n/a
+                    execution_status_id = 4
+                elif test.status == "FAIL":
+                    #1 is failed
+                    execution_status_id = 1
+                elif test.status == "NOT RUN":
+                    #5 is blocked
+                    execution_status_id = 5
+                elif test.status == "NOT SET":
+                    #1 is n/a
+                    execution_status_id = 4
 
-            # Parse the test case ID, and append the result
-            self.test_results.append(test_result)
+                # Create new test result object
+                test_result = {
+                    'test_case_id': test_case_id,
+                    'name': test.name,
+                    'execution_status_id': execution_status_id,
+                    'stack_trace': test.message,
+                    'message': test.message + ' (' + test.status + ')',
+                    'duration_seconds': test.elapsedtime * 1000
+                }
+
+                # Parse the test case ID, and append the result
+                self.test_results.append(test_result)
 
     def end_result(self, result):
         # Send the results to Spira
