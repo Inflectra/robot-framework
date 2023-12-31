@@ -25,6 +25,60 @@ To obtain the latest version of the plugin, simply run the following command:
 This command will install the latest version of the plugin straight from the Python Package Index (PyPI). Once the Spira plugin is successfully installed, all you need to do is configure the plugin, annotate your Robot Framework test cases with Spira-specific tags, then you can begin testing!
 
 ## Using the Integration
+The integration consists of a Python module called `robot_spira_integration.py` that is executed after your Robot Framework tests are executed. This module will read the resulsts of the Robot Framework `output.xml` report file and send the results to Spira, mapping each Robot Framework test case to a matching Spira test case.
+
+### Configuring the Spira connection
+In your test root folder (the folder you have your Robot Framework tests),
+create a file named `spira.cfg` with the following:
+
+```cfg
+[credentials]
+# Following are required
+
+url = https://myserver/spiraservice.net
+username = fredbloggs
+token = {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXX}
+project_id = 1
+
+# Following are optional:
+release_id = 5
+test_set_id = 1
+```
+
+For the plugin to work, you must have the following in the credentials group:
+
+- **url** -- The base url to your Spira installation, without a '/' at
+the end.
+
+- **username** -- The username you use to sign into Spira.
+
+- **token** -- Your API Key / RSS Token. Found in your profile page as the "RSS
+Token" field, you must have RSS Feeds enabled for this to work.
+
+- **project_id** -- The ID of the project you would like the test runs to
+be sent to
+
+- **release_id** -- OPTIONAL -- Use if you would like to associate the
+test run with a release.
+
+- **test_set_id** -- OPTIONAL -- Use if you would like to associate the
+test run with a test set.
+
+### Tagging the Test Cases
+TBD
+
+### Executing the Tests
+TBD
+
+run the sample test
+`robot tests.robot`
+`python -m robot tests.robot`
+
+run the Spira results integration to upload the results to Spira
+`python robot_spira_integration.py`
+`python robot_spira_integration.py Output.xml spira.cfg`
+
+### Viewing the Results
 TBD
 
 ## Have Questions or Need Assistance?
@@ -34,11 +88,3 @@ If you are an Inflectra customer, please contact our customer support at:
 
 Otherwise, please feel free to post a question on our public forums:
 - [Test Case Integration Forum](https://www.inflectra.com/Support/Forum/integrations/unit-testing/List.aspx)
-
-run the sample test
-`robot tests.robot`
-`python -m robot tests.robot`
-
-run the Spira results integration to upload the results to Spira
-`python robot_spira_integration.py`
-`python robot_spira_integration.py Output.xml spira.cfg`
