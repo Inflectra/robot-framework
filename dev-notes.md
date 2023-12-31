@@ -11,7 +11,13 @@
 - Make sure the spira url and login/password are correct in the spira.cfg file
 - Use either of these two commands, depending on whether you want to test running with a specific output folder/filename
 - run `python robot_spira_integration.py`
-- run `python robot_spira_integration.py Output.xml`
+- run `python robot_spira_integration.py Output.xml spira.cfg`
+
+## Work and test code locally
+- change version number in setup.py
+- to build locally and replace the local package run `pip install -e ./`
+- you can then access the package as you would normally. So in your test setup run `python robot_spira_integration.py` and it will use this local plugin
+- make changes to code, repeat building and testing locally 
 
 ## Distribute code
 - double check the version is correct in setup.py

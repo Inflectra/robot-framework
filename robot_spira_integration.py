@@ -12,7 +12,7 @@ The config is only retrieved once
 '''
 config = None
 
-def getConfig():
+def getConfig(config_file):
     global config
     # Only retrieve config once
     if config is None:
@@ -27,7 +27,7 @@ def getConfig():
         }
         # Parse the config file
         parser = configparser.ConfigParser()
-        parser.read("spira.cfg")
+        parser.read(config_file)
 
         sections = parser.sections()
 
@@ -133,9 +133,9 @@ class SpiraTestRun:
             return True
         
 class SpiraPostResults():
-    def __init__(self):
+    def __init__(self, config_file):
         # Get the configuration information
-        self.config = getConfig()
+        self.config = getConfig(config_file)
 
     def sendResults(self, test_results):
         # Only do stuff if config is specified
@@ -243,7 +243,7 @@ class SpiraResultVisitor(ResultVisitor):
 
     def end_result(self, result):
         # Send the results to Spira
-        spira_results = SpiraPostResults()
+        spira_results = SpiraPostResults(config_file)
         spira_results.sendResults(self.test_results)
                 
 if __name__ == '__main__':
@@ -251,5 +251,9 @@ if __name__ == '__main__':
         output_file = sys.argv[1]
     except IndexError:
         output_file = "output.xml"
+    try:
+        config_file = sys.argv[2]
+    except IndexError:
+        config_file = "spira.cfg"
     result = ExecutionResult(output_file)
     result.visit(SpiraResultVisitor())
