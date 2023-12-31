@@ -16,7 +16,13 @@ Spira comes in three flavors:
 - [SpiraPlan](https://www.inflectra.com/SpiraPlan/), enterprise planning and testing platform
 
 ## Installing the Integration
-TBD
+This section outlines how to install the Spira plugin for Robot Framework. It assumes that you already have a working installation of Spira v6.0 or later. If you have an earlier version of Spira you will need to upgrade to at least v6.0 before trying to use this plugin. You will also need to have Python (with pip) and Robot Framework installed.
+
+To obtain the latest version of the plugin, simply run the following command:
+
+`pip install spira-robot-framework`
+
+This command will install the latest version of the plugin straight from the Python Package Index (PyPI). Once the Spira plugin is successfully installed, all you need to do is configure the plugin, annotate your Robot Framework test cases with Spira-specific tags, then you can begin testing!
 
 ## Using the Integration
 TBD
