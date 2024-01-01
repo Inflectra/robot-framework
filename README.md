@@ -65,21 +65,65 @@ test run with a release.
 test run with a test set.
 
 ### Tagging the Test Cases
-TBD
+Next, you need to tag each of your Robot Framework test cases with the appropriate Spira test case id (prefixed by TC:). For example, if you had this sample Robot Framework test:
+
+```py
+Simple Test Case
+    [Documentation]    Shows some assertion keywords
+    Should Be Title Case    Robot Framework
+    Should Be Equal    Text123    Text123
+    Should Be True    5 + 5 == 10
+```
+
+You can add the Spira test case ID (TC:2 for example), simply by adding it as one of the Robot Framework test case **tags**:
+
+```py
+Simple Test Case
+    [Documentation]    Shows some assertion keywords
+    [Tags]    TC:2
+    Should Be Title Case    Robot Framework
+    Should Be Equal    Text123    Text123
+    Should Be True    5 + 5 == 10
+```
+You should then repeat this for all of the other test cases in the test suite. Note: please make sure that all of the test case IDs are inside the Spira project ID you specified earlier in the `spira.cfg` file.
 
 ### Executing the Tests
-TBD
+Now you are ready to execute your tests and send the results back so Spira. This happens in two steps:
+- Execute the tests and generate the `output.xml` report file
+- Parse the `output.xml` report file and send the results to Spira
 
-run the sample test
+First run your tests using the standard `robot` command. For example, if we were executing the supplied sample test `tests.robot` you would use:
+
 `robot tests.robot`
+
+OR
+
 `python -m robot tests.robot`
 
-run the Spira results integration to upload the results to Spira
+Next, you need to run the Spira results parser module `robot_spira_integration_py` to upload the results to Spira. For example, with the sample tests you can use either:
+
 `python robot_spira_integration.py`
+
+OR
+
 `python robot_spira_integration.py Output.xml spira.cfg`
 
+The second version lets you specify the location of the output file and the Spira configuration file. It's syntax is:
+
+`python robot_spira_integration.py <Output File> <Spira Config File>`
+
+Once that is done, you should see something like:
+
+```
+Sending test results to Spira at URL 'https://myserver/spiraservice.net'.
+Successfully reported 4 test cases to Spira.
+```
+
+If there are any errors or warnings, they will be displayed instead.
+
 ### Viewing the Results
-TBD
+Finally, to view the resulst in Spira, you can go to the **Test Runs** tab to see the list of test runs:
+
 
 ## Have Questions or Need Assistance?
 If you are an Inflectra customer, please contact our customer support at:
