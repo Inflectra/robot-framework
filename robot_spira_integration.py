@@ -199,8 +199,9 @@ class SpiraResultVisitor(ResultVisitor):
             test_case_id = -1
             for tag in test.tags:
                 m = re.search('TC:([0-9]+)', tag)
-                if m.lastindex == 1:
-                    test_case_id = m.group(1)
+                if m:
+                    if m.lastindex == 1:
+                        test_case_id = m.group(1)
             
             if test_case_id == -1:
                 print("Unable to find Spira id tag for test case '{}', so skipping this test case.".format(test.name))

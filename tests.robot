@@ -33,3 +33,7 @@ Test Case that fails
     [Tags]    TC:5
     Check Correct Greeting    Hail Our Robot Overlords!
     Check Correct Greeting    Hello World!
+
+Test Case without Spira Tags
+    [Tags]    Test
+    Log To Console    Run test without spira tags
